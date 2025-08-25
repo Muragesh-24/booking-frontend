@@ -21,7 +21,7 @@ const router=useRouter();
     setMessage("");
 
     try {
-      const payload: any = { email };
+      const payload: unknown  = { email };
       if (mode === "signup") {
         // payload.name = name;
         // payload.roll = roll;
@@ -60,8 +60,8 @@ const router=useRouter();
       } else {
         setMessage("Signup successful! Please verify your email.");
       }
-    } catch (err: any) {
-      setMessage(err.message);
+    } catch (err: unknown) {
+      setMessage("sign up failed , do u alredy have a account??");
     } finally {
       setLoading(false);
     }

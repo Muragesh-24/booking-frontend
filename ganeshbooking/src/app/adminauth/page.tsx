@@ -32,8 +32,8 @@ export default function AdminLoginPage() {
       const data = await res.json();
       localStorage.setItem("adminToken", data.token); 
       router.push("/scrt_this_is_something"); 
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+    } catch (err:unknown) {
+      setError( "Login failed");
     } finally {
       setLoading(false);
     }
