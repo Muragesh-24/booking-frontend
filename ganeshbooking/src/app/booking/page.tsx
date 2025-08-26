@@ -237,7 +237,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
             <p className="text-sm text-gray-300 mt-2">
               Please pay to this UPI <span className="text-yellow-400 font-semibold"></span>
               <br />
-               Check that the name shows as <span className="font-bold text-white">Dattatreya N </span> in your UPI app.
+               Check that the name shows as <span className="font-bold text-white">Dattatreya N N</span> in your UPI app.
             </p>
          
           </div>
