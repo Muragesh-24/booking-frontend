@@ -41,7 +41,10 @@ export default function ProtectedAdminRoute({ children }: ProtectedRouteProps) {
   }, [router]);
 
   if (loading) {
-    return <div>Loading...</div>; /////////////////@@@@@@@@@@@@@@@@must improve it
+    return <div className="flex justify-center items-center py-10">
+  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-400"></div>
+</div>
+; /////////////////@@@@@@@@@@@@@@@@must improve it
   }
 
   return <>{children}</>;

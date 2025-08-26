@@ -49,7 +49,10 @@ import VerifiedPage from "./verifiedpage";
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="flex justify-center items-center py-10">
+  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-400"></div>
+</div>
+}>
       <VerifiedPage/>
     </Suspense>
   );

@@ -83,7 +83,7 @@ export default function Home() {
           </span>
         </h1>
         <p className="text-gray-300 text-lg md:text-xl max-w-2xl mb-8">
-          Celebrating Ganeshotsav. A rebirth of culture, energy, and art.
+          Celebrating Ganeshotsav By Kannadda Balag IIT Kanpur. A rebirth of culture, energy, and art.
         </p>
         <button
           
@@ -123,16 +123,17 @@ export default function Home() {
   <div className="flex justify-center">
     <div className="bg-white shadow-2xl rounded-2xl p-10 max-w-md w-full">
       <ul className="space-y-4 text-gray-700 text-lg font-medium">
-        <li className="hover:scale-105 transition-transform">🥗 Kosumbari</li>
-        <li className="hover:scale-105 transition-transform">🍘 Hapla</li>
-        <li className="hover:scale-105 transition-transform">🍠 Bajji</li>
-        <li className="hover:scale-105 transition-transform">🌾 Godi Uggi</li>
-        <li className="hover:scale-105 transition-transform">🍋 Puliyogre</li>
-        <li className="hover:scale-105 transition-transform">🍞 Chapati</li>
-        <li className="hover:scale-105 transition-transform">🥬 Kalu Palya</li>
-        <li className="hover:scale-105 transition-transform">🌶️ Chutney Pudi</li>
-        <li className="hover:scale-105 transition-transform">🍚 Rice n Sambar</li>
-        <li className="hover:scale-105 transition-transform">🥛 Majjige</li>
+ <li className="hover:scale-105 transition-transform">Kosambari</li>
+<li className="hover:scale-105 transition-transform">Happla</li>   {/* (sun-dried papad) */}
+<li className="hover:scale-105 transition-transform">Bajji</li>
+<li className="hover:scale-105 transition-transform">Godi Huggi</li>  {/* (sweet wheat porridge) */}
+<li className="hover:scale-105 transition-transform">Puliyogare</li>
+<li className="hover:scale-105 transition-transform">Chapati</li>
+<li className="hover:scale-105 transition-transform">Kalu Palya</li>  {/* (lentil/curry dish) */}
+<li className="hover:scale-105 transition-transform">Chutney Pudi</li>
+<li className="hover:scale-105 transition-transform">Rice & Sambar</li>
+<li className="hover:scale-105 transition-transform">Majjige</li>
+
       </ul>
     </div>
   </div>

@@ -8,8 +8,8 @@ export default function AuthPage() {
   const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
 const router=useRouter();
   // Form states
-  // const [name, setName] = useState("");
-  // const [roll, setRoll] = useState("");
+  const [name, setName] = useState("");
+  const [roll, setRoll] = useState("");
   const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,12 +20,19 @@ const router=useRouter();
     setLoading(true);
     setMessage("");
 
+type Pay = {
+  email: string;
+  name?: string;
+  roll?: string;
+};
+
+
     try {
-      const payload: unknown  = { email };
+      const payload: Pay  = { email };
       if (mode === "signup") {
-        // payload.name = name;
-        // payload.roll = roll;
-        // payload.password = password;
+        payload.name = name;
+        payload.roll = roll;
+   
       }
       if (mode === "signin") {
         // payload.password = password;
@@ -43,25 +50,29 @@ const router=useRouter();
       });
 
       const data = await res.json();
-      console.log(data)
+      localStorage.setItem("authToken", data.token);
+
 
       if (!res.ok) throw new Error(data.error || "Something went wrong");
 
       if (mode === "signin") {
         // store token in localStorage
   
-        localStorage.setItem("authToken", data.token);
+ 
         setEmail("")
-        // setName("")
+        setName("")
         // setPassword("")
-        // setRoll("")
+        setRoll("")
         setMessage("Login successful!");
         router.push("/booking")
       } else {
-        setMessage("Signup successful! Please verify your email.");
+         setMessage("Signup successful!");
+         router.push("/booking")
       }
     } catch (err: unknown) {
-      setMessage("sign up failed , do u alredy have a account??");
+          if (mode === "signin") {setMessage("Record Not found")}
+          else{
+      setMessage("sign up failed , Please try again");}
     } finally {
       setLoading(false);
     }
@@ -72,6 +83,7 @@ const router=useRouter();
       <BackButton />
       <main className="min-h-screen bg-[#0b0f19] text-white flex items-center justify-center px-6">
         <div className="w-full max-w-md bg-[#101522] rounded-2xl shadow-lg p-8 relative z-10">
+          
           <h1 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
             {mode === "signin"
               ? "Welcome Back"
@@ -88,7 +100,7 @@ const router=useRouter();
             {mode === "signup" && (
               <>
                 <div>
-                  {/* <label className="block text-sm mb-1 text-gray-300">
+                  <label className="block text-sm mb-1 text-gray-300">
                     Name
                   </label>
                   <input
@@ -98,11 +110,11 @@ const router=useRouter();
                     placeholder="Enter your name"
                     className="w-full px-4 py-2 rounded-lg bg-[#0b0f19] border border-gray-600 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none"
                     required
-                  /> */}
+                  />
                 </div>
 
                 <div>
-                  {/* <label className="block text-sm mb-1 text-gray-300">
+                  <label className="block text-sm mb-1 text-gray-300">
                     Rollnumber
                   </label>
                   <input
@@ -112,7 +124,7 @@ const router=useRouter();
                     placeholder="Enter your rollnumber"
                     className="w-full px-4 py-2 rounded-lg bg-[#0b0f19] border border-gray-600 focus:border-yellow-400 focus:ring-1 focus:ring-yellow-400 outline-none"
                     required
-                  /> */}
+                  />
                 </div>
               </>
             )}
@@ -128,6 +140,15 @@ const router=useRouter();
                 required
               />
             </div>
+              {mode === "signup" && (
+              <div className="mt-3 p-3 rounded-lg bg-[#1a1f2e] border border-yellow-500 text-sm text-yellow-300">
+                <p>
+                  ℹ️ Your email will be used to send <span className="font-semibold">coupons </span> 
+                  and also for future <span className="font-semibold">sign-in</span>. 
+                  Please enter a valid email.
+                </p>
+              </div>
+            )}
 
             {mode !== "forgot" && (
               <div>

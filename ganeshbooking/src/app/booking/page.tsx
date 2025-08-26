@@ -34,6 +34,7 @@ type Booking = {
  email: string;
  total: number;
  status: string;
+ is_verified : boolean;
  createdAt: string;
 };
 export default function BookingPage() {
@@ -91,6 +92,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
 
       const data = await res.json();
       setBookings({ coupons: data.data || [] });
+
     } catch (err) {
       console.error("Error fetching bookings:", err);
     }
@@ -101,6 +103,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
 
   fetchBookings();
 }, []);
+
 
     const pushOrder = async () => {
     const token = await localStorage.getItem("authToken");
@@ -195,16 +198,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
           </div>
 
           {/* UTR */}
-          <div className="space-y-2">
-            <Label htmlFor="utr" className="text-yellow-400">Payment UTR Number</Label>
-            <Input
-              id="utr"
-              placeholder="Enter UTR Number"
-              value={utr}
-              onChange={(e) => setUtr(e.target.value)}
-              className="bg-[#0b0f19] border-gray-700 focus:ring-yellow-400"
-            />
-          </div>
+         
 
           {/* Numbers */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -247,6 +241,16 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
             </p>
          
           </div>
+           <div className="space-y-2">
+            <Label htmlFor="utr" className="text-yellow-400">Payment UTR Number</Label>
+            <Input
+              id="utr"
+              placeholder="Enter UTR Number"
+              value={utr}
+              onChange={(e) => setUtr(e.target.value)}
+              className="bg-[#0b0f19] border-gray-700 focus:ring-yellow-400"
+            />
+          </div>
 
           {/* Submit Button */}
           <AlertDialog>
@@ -288,6 +292,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
               <th className="p-2 border">Email</th>
               <th className="p-2 border">Total</th>
               <th className="p-2 border">Status</th>
+                 <th className="p-2 border">BookingStatus</th>
               <th className="p-2 border">Date</th>
             </tr>
           </thead>
@@ -299,6 +304,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
                 <td className="p-2 border">{b.email}</td>
                 <td className="p-2 border">₹{b.total}</td>
                 <td className="p-2 border">{b.status}</td>
+                  <td className="p-2 border">{b.is_verified ? "Verified ✅" : "Pending "}</td>
                 <td className="p-2 border">
                   {new Date(b.createdAt).toLocaleDateString()}
                 </td>
