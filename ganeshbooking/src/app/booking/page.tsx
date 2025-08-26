@@ -234,16 +234,16 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
 
           {/* Total + UPI Info */}
           <div className="bg-[#0f172a] border border-yellow-500 rounded-xl p-4 text-center">
-         <img src="/qr.png" height="200" width={200}  className="m-auto"alt="QR Code" />
+         <img src="/qr.jpg" height="200" width={200}  className="m-auto"alt="QR Code" />
 
             <p className="text-lg font-semibold">
               Total Amount:{" "}
               <span className="text-yellow-400">₹{total}</span>
             </p>
             <p className="text-sm text-gray-300 mt-2">
-              Please pay to UPI: <span className="text-yellow-400 font-semibold">9876543210@upi</span>
+              Please pay to this UPI <span className="text-yellow-400 font-semibold"></span>
               <br />
-               Check that the name shows as <span className="font-bold text-white">Shatadru</span> in your UPI app.
+               Check that the name shows as <span className="font-bold text-white">Dattatreya N </span> in your UPI app.
             </p>
          
           </div>
