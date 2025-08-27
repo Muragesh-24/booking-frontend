@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kannadda Balaga IIT Kanpur",
-  description: "Celebrating Ganeshotsav By Kannadda Balag IIT Kanpur. A rebirth of culture, energy, and art.",
+  title: "Kannada Balaga IIT Kanpur",
+  description: "Celebrating Ganeshotsav By Kannada Balaga IIT Kanpur. A rebirth of culture, energy, and art.",
 };
 
 export default function RootLayout({

@@ -83,7 +83,7 @@ export default function Home() {
           </span>
         </h1>
         <p className="text-gray-300 text-lg md:text-xl max-w-2xl mb-8">
-          Celebrating Ganeshotsav By Kannadda Balag IIT Kanpur. A rebirth of culture, energy, and art.
+          Celebrating Ganeshotsav By Kannada Balaga IIT Kanpur. A rebirth of culture, energy, and art.
         </p>
         <button
           
@@ -130,15 +130,15 @@ export default function Home() {
     <div className="bg-white shadow-2xl rounded-2xl p-10 max-w-md w-full">
       <ul className="space-y-4 text-gray-700 text-lg font-medium">
  <li className="hover:scale-105 transition-transform">Kosambari</li>
-<li className="hover:scale-105 transition-transform">Happla</li>   {/* (sun-dried papad) */}
+<li className="hover:scale-105 transition-transform">Happla (sun-dried papad) </li>   
 <li className="hover:scale-105 transition-transform">Bajji</li>
-<li className="hover:scale-105 transition-transform">Godi Huggi</li>  {/* (sweet wheat porridge) */}
+<li className="hover:scale-105 transition-transform">Godi Huggi (sweet wheat porridge)</li> 
 <li className="hover:scale-105 transition-transform">Puliyogare</li>
 <li className="hover:scale-105 transition-transform">Chapati</li>
-<li className="hover:scale-105 transition-transform">Kalu Palya</li>  {/* (lentil/curry dish) */}
-<li className="hover:scale-105 transition-transform">Chutney Pudi</li>
+<li className="hover:scale-105 transition-transform">Kalu Palya (lentil/curry dish) </li>  
+<li className="hover:scale-105 transition-transform">Chutney Pudi (spiced dry chutney powder)</li>
 <li className="hover:scale-105 transition-transform">Rice & Sambar</li>
-<li className="hover:scale-105 transition-transform">Majjige</li>
+<li className="hover:scale-105 transition-transform">Majjige (buttermilk)</li>
 
       </ul>
     </div>
