@@ -72,7 +72,7 @@ type Pay = {
     } catch (err: unknown) {
           if (mode === "signin") {setMessage("Record Not found")}
           else{
-      setMessage("sign up failed , Email already registerd");}
+      setMessage("sign up failed , Email already registered");}
     } finally {
       setLoading(false);
     }
