@@ -10,7 +10,7 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   const events = [
-    { time: "08:00 AM", title: "Ganesh Pratishthana Pooja" },
+    { time: "08:00 AM", title: "Ganesh Pratishtpana Pooja" },
     { time: "06:00 PM", title: "Evening Cultural Activities" },
     { time: "08:00 PM", title: "Dinner" },
     { time: "10:00 PM", title: "Ganesh Visarjana" },
@@ -126,24 +126,42 @@ export default function Home() {
     🍽️ Dinner Menu
   </h3>
 
-  <div className="flex justify-center">
-    <div className="bg-white shadow-2xl rounded-2xl p-10 max-w-md w-full">
-      <ul className="space-y-4 text-gray-700 text-lg font-medium">
- <li className="hover:scale-105 transition-transform">Kosambari</li>
-<li className="hover:scale-105 transition-transform">Happla (sun-dried papad) </li>   
-<li className="hover:scale-105 transition-transform">Bajji</li>
-<li className="hover:scale-105 transition-transform">Godi Huggi (sweet wheat porridge)</li> 
-<li className="hover:scale-105 transition-transform">Puliyogare</li>
-<li className="hover:scale-105 transition-transform">Chapati</li>
-<li className="hover:scale-105 transition-transform">Kalu Palya (lentil/curry dish) </li>  
-<li className="hover:scale-105 transition-transform">Chutney Pudi (spiced dry chutney powder)</li>
-<li className="hover:scale-105 transition-transform">Rice & Sambar</li>
-<li className="hover:scale-105 transition-transform">Majjige (buttermilk)</li>
+<div className="flex justify-center">
+  <div className="bg-white shadow-2xl rounded-2xl p-10 max-w-md w-full">
+    <div className="text-gray-800 text-xl font-bold mb-4">Starters</div>
+    <ul className="space-y-4 text-gray-700 text-lg font-medium mb-6">
+      <li className="hover:scale-105 transition-transform">Kosambari</li>
+      <li className="hover:scale-105 transition-transform">Happla (sun-dried papad)</li>   
+      <li className="hover:scale-105 transition-transform">Bajji (fried vegetable fritters)</li>
+      <li className="hover:scale-105 transition-transform">Godi Huggi (sweet wheat porridge)</li> 
+    </ul>
 
-      </ul>
-    </div>
+    <div className="text-gray-800 text-xl font-bold mb-4">Main Course</div>
+    <ul className="space-y-4 text-gray-700 text-lg font-medium">
+      <li className="hover:scale-105 transition-transform">Puliyogare</li>
+      <li className="hover:scale-105 transition-transform">Chapati</li>
+      <li className="hover:scale-105 transition-transform">Kalu Palya (lentil/curry dish)</li>  
+      <li className="hover:scale-105 transition-transform">Chutney Pudi (spiced dry chutney powder)</li>
+      <li className="hover:scale-105 transition-transform">Rice & Sambar</li>
+      <li className="hover:scale-105 transition-transform">Majjige (buttermilk)</li>
+    </ul>
   </div>
+</div>
+
 </section>
+<div className="flex justify-center mt-8 mb-8">
+  <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full">
+    <div className="text-gray-800 text-xl font-bold mb-4">Contact</div>
+    <ul className="space-y-3 text-gray-700 text-lg font-medium">
+      <li>
+        <span className="font-semibold">Aravind KT:</span> 9141644060
+      </li>
+      <li>
+        <span className="font-semibold">Shathadru:</span> 8660059031
+      </li>
+    </ul>
+  </div>
+</div>
 
 
 

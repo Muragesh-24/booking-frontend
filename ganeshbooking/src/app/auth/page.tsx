@@ -115,7 +115,7 @@ type Pay = {
 
                 <div>
                   <label className="block text-sm mb-1 text-gray-300">
-                    Rollnumber
+                    Rollnumber / other ID
                   </label>
                   <input
                     type="text"

@@ -40,6 +40,7 @@ type Booking = {
 export default function BookingPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+   const [phone, setPhone] = useState("");
   const [utr, setUtr] = useState("");
   const [kannadigas, setKannadigas] = useState(0);
   const [nonKannadigas, setNonKannadigas] = useState(0);
@@ -125,6 +126,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
           body: JSON.stringify({
             name,
             email,
+            phone,
             utr,
             kannadigas,
             nonKannadigas,
@@ -141,6 +143,12 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
   
  toast.success("Order placed successfully!")
  fetchBookings();
+ setEmail("")
+ setName("")
+ setPhone("")
+ setUtr("")
+ setKannadigas(0)
+ setNonKannadigas(0)
    
     } catch (err) {
       console.error(err);
@@ -202,6 +210,17 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="bg-[#0b0f19] border-gray-700 focus:ring-yellow-400"
+            />
+          </div>
+
+                <div className="space-y-2">
+            <Label htmlFor="phone" className="text-yellow-400">Contact Number</Label>
+            <Input
+              id="phone"
+              placeholder="Enter your Contact number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="bg-[#0b0f19] border-gray-700 focus:ring-yellow-400"
             />
           </div>
@@ -288,6 +307,13 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
         </CardContent>
       </Card>
     </main>
+    <div className="flex justify-center mt-4">
+  <div className="max-w-md w-full t text-sm text-white text-center">
+    After verification of the booking, it will be shown in your history(under verification) and the coupon will be sent to your email. 
+    For any concerns, please contact us.
+  </div>
+</div>
+
   <h2 className="text-center text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent m-4"> Your Bookings</h2>
          {bookings.coupons.length === 0 ? (
         <p className="text-gray-500 text-center">No past bookings found.</p>
@@ -301,7 +327,7 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
               <th className="p-2 border">Email</th>
               <th className="p-2 border">Total</th>
               <th className="p-2 border">Status</th>
-                 <th className="p-2 border">BookingStatus</th>
+                 <th className="p-2 border">VerificationStatus</th>
               <th className="p-2 border">Date</th>
             </tr>
           </thead>
