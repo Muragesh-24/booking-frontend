@@ -55,7 +55,7 @@ export default function BookingPage() {
 let nonKannadigaTotal = 0;
 
 if (nonKannadigas < 2) {
-  nonKannadigaTotal = nonKannadigas * priceNonKannadiga * 0.1;
+  nonKannadigaTotal = nonKannadigas * priceNonKannadiga * 0.9;
 } else if (nonKannadigas <= 4) {
   nonKannadigaTotal = nonKannadigas * priceNonKannadiga * 0.8;
 } else {
