@@ -54,8 +54,8 @@ export default function BookingPage() {
 let nonKannadigaTotal = 0;
 
 if (nonKannadigas < 2) {
-  nonKannadigaTotal = nonKannadigas * priceNonKannadiga;
-} else if (nonKannadigas <= 5) {
+  nonKannadigaTotal = nonKannadigas * priceNonKannadiga * 0.1;
+} else if (nonKannadigas <= 4) {
   nonKannadigaTotal = nonKannadigas * priceNonKannadiga * 0.8;
 } else {
   nonKannadigaTotal = nonKannadigas * priceNonKannadiga * 0.7;
@@ -161,15 +161,24 @@ const total = kannadigas * priceKannadiga + nonKannadigaTotal;
     <main className="min-h-screen  flex items-center justify-center px-4 py-10">
      <Toaster position="bottom-right" richColors />
       <Card className="w-full max-w-2xl bg-[#101522] border border-gray-700 rounded-2xl shadow-lg text-white">
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-            Book Your Spot
-          </CardTitle>
-          <p className="mt-2 text-gray-400">
-            Kannadigas: <span className="text-yellow-400 font-semibold">₹350</span> | 
-            Non-Kannadigas: <span className="text-yellow-400 font-semibold">₹250</span>
-          </p>
-        </CardHeader>
+    <CardHeader className="text-center">
+  <CardTitle className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+    Book Your Spot
+  </CardTitle>
+  <p className="mt-2 text-gray-400">
+    Per Coupon: <span className="text-yellow-400 font-semibold">₹350</span>
+  </p>
+
+  <div className="mt-2 text-gray-400">
+    <p className="font-semibold">Non-Kannadiga Discounts:</p>
+    <ul className="list-disc list-inside space-y-1">
+      <li>1 Coupon: 10% off</li>
+      <li>2-4 Coupons: 20% off</li>
+      <li>5 or more Coupons: 30% off</li>
+    </ul>
+  </div>
+</CardHeader>
+
 
         <CardContent className="space-y-6">
           {/* Name */}

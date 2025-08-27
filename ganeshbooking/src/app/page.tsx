@@ -97,9 +97,15 @@ export default function Home() {
 
       {/* Events Timeline Section */}
       <section id="events" className="relative z-10 py-20 px-6 md:px-20">
-        <h2 className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
-          Events Timeline
-        </h2>
+    <h2 className="text-4xl font-bold text-center mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
+  Events Timeline
+</h2>
+
+<div className="text-center text-gray-700 mb-12 space-y-1">
+  <p className="font-semibold">Date: <span className="text-yellow-500">6th September</span></p>
+  <p className="font-semibold">Venue: <span className="text-yellow-500">Aashiyana Hall, New Shopping Complex</span></p>
+</div>
+
         <div className="relative border-l-4 border-yellow-400 max-w-2xl mx-auto">
           {events.map((event, idx) => (
             <div key={idx} className="mb-10 ml-6">
