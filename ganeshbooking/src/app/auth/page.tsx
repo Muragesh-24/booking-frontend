@@ -72,7 +72,7 @@ type Pay = {
     } catch (err: unknown) {
           if (mode === "signin") {setMessage("Record Not found")}
           else{
-      setMessage("sign up failed , Please try again");}
+      setMessage("sign up failed , Email already registerd");}
     } finally {
       setLoading(false);
     }
@@ -145,7 +145,7 @@ type Pay = {
                 <p>
                   ℹ️ Your email will be used to send <span className="font-semibold">coupons </span> 
                   and also for future <span className="font-semibold">sign-in</span>. 
-                  Please enter a valid email.
+                  Please enter a valid email.<br></br>
                 </p>
               </div>
             )}
