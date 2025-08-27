@@ -130,19 +130,19 @@ export default function Home() {
   <div className="bg-white shadow-2xl rounded-2xl p-10 max-w-md w-full">
     <div className="text-gray-800 text-xl font-bold mb-4">Starters</div>
     <ul className="space-y-4 text-gray-700 text-lg font-medium mb-6">
-      <li className="hover:scale-105 transition-transform">Kosambari</li>
-      <li className="hover:scale-105 transition-transform">Happla (sun-dried papad)</li>   
-      <li className="hover:scale-105 transition-transform">Bajji (fried vegetable fritters)</li>
-      <li className="hover:scale-105 transition-transform">Godi Huggi (sweet wheat porridge)</li> 
+      <li className="hover:scale-105 transition-transform">Kosumbari(vegetable Mix)</li>
+      <li className="hover:scale-105 transition-transform">Happla (papad)</li>   
+      <li className="hover:scale-105 transition-transform">Bajji (Besan Fries)</li>
+      <li className="hover:scale-105 transition-transform">Godi Huggi ( wheat Dessert)</li> 
     </ul>
 
     <div className="text-gray-800 text-xl font-bold mb-4">Main Course</div>
     <ul className="space-y-4 text-gray-700 text-lg font-medium">
-      <li className="hover:scale-105 transition-transform">Puliyogare</li>
+      <li className="hover:scale-105 transition-transform">Puliyogare(Temrind Rice)</li>
       <li className="hover:scale-105 transition-transform">Chapati</li>
-      <li className="hover:scale-105 transition-transform">Kalu Palya (lentil/curry dish)</li>  
+      <li className="hover:scale-105 transition-transform">Kalu Palya (Chickpea Gravy/curry dish)</li>  
       <li className="hover:scale-105 transition-transform">Chutney Pudi (spiced dry chutney powder)</li>
-      <li className="hover:scale-105 transition-transform">Rice & Sambar</li>
+      <li className="hover:scale-105 transition-transform">Rice & Sambar(Karnataka Special)</li>
       <li className="hover:scale-105 transition-transform">Majjige (buttermilk)</li>
     </ul>
   </div>
