@@ -53,6 +53,9 @@ export default function AdminPage() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/`);
       const json = await res.json();
+      const sortedData = json.data.sort((a: Booking, b: Booking) => b.id - a.id);
+      json.data = sortedData;
+      console.log("Fetched users:", json.data);
       setUsers(json.data);
       setStats({
         total: json.total,
@@ -196,6 +199,7 @@ export default function AdminPage() {
               <TableHead>Non-Kannadigas</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Created At</TableHead>
+              <TableHead>Created time</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>StatusCount</TableHead>
               <TableHead>Verification</TableHead>
@@ -221,6 +225,9 @@ export default function AdminPage() {
                   <TableCell>
                     {new Date(user.createdAt).toLocaleDateString()}
                   </TableCell>
+                    <TableCell>
+                    {new Date(user.createdAt).toLocaleTimeString()}
+                    </TableCell>
                   <TableCell>{user.status}</TableCell>
                 <TableCell>
   <div className="flex items-center gap-2">
