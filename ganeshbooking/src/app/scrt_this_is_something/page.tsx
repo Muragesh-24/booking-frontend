@@ -192,6 +192,7 @@ export default function AdminPage() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>No</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>UTR Number</TableHead>
@@ -215,7 +216,8 @@ export default function AdminPage() {
               </TableRow>
             ) : (
               users.map((user) => (
-                <TableRow key={user.utr}>
+                <TableRow key={user.utr} className={`${user.is_verified==true?"bg-white":"bg-amber-300"}`}>
+                  <TableCell>{user.id-26}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.utr}</TableCell>
