@@ -40,6 +40,8 @@ export default function AdminPage() {
   const [users, setUsers] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedUtr, setSelectedUtr] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   const [stats, setStats] = useState({
     total: 0,
@@ -113,6 +115,14 @@ export default function AdminPage() {
     }
   };
 
+  const filteredUsers = users.filter(
+  (u) =>
+    u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    u.utr.toLowerCase().includes(searchTerm.toLowerCase())
+);
+
+
   return (
     <ProtectedAdminRoute>
     <div className="p-6 space-y-6">
@@ -138,12 +148,12 @@ export default function AdminPage() {
             <p className="text-2xl">{stats.pendingVerify}</p>
           </CardContent>
         </Card>
-        <Card>
+        {/* <Card>
           <CardContent className="p-4">
             <p className="text-lg font-semibold">Total Entered</p>
             <p className="text-2xl">{stats.totalEntered}</p>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Action Dialog */}
@@ -189,6 +199,23 @@ export default function AdminPage() {
           </Button>
         </div>
 
+        <div className="flex justify-between items-center mb-4">
+ 
+  <div className="flex gap-2">
+    <input
+      type="text"
+      placeholder="Search by name, email, or UTR..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="border rounded px-3 py-2 w-64"
+    />
+    {/* <Button onClick={fetchUsers} disabled={loading}>
+      {loading ? "Refreshing..." : "Refresh"}
+    </Button> */}
+  </div>
+</div>
+
+
         <Table>
           <TableHeader>
             <TableRow>
@@ -208,15 +235,15 @@ export default function AdminPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users.length === 0 ? (
+            {filteredUsers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={10} className="text-center">
                   {loading ? "Loading..." : "No users found"}
                 </TableCell>
               </TableRow>
             ) : (
-              users.map((user) => (
-                <TableRow key={user.utr} className={`${user.is_verified==true?"bg-white":"bg-amber-300"}`}>
+              filteredUsers.map((user) => (
+                <TableRow key={user.utr} className={`${user.is_verified==true && user.status=="Present"?"bg-green-300":"bg-white"}`}>
                   <TableCell>{user.id-26}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
@@ -290,7 +317,7 @@ export default function AdminPage() {
   </div>
 </TableCell>
 
-                  <TableCell>
+                  <TableCell className={user.is_verified ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>
                     {user.is_verified ? "Verified" : "Pending"}
                   </TableCell>
                   <TableCell>
