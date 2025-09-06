@@ -28,7 +28,7 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   const events = [
-    { time: "08:00 AM", title: "Ganesh Pratishtpana Pooja" },
+    { time: "10:00 AM", title: "Ganesh Pratishtpana Pooja" },
     { time: "06:00 PM", title: "Evening Cultural Activities" },
     { time: "08:00 PM", title: "Dinner" },
     { time: "10:00 PM", title: "Ganesh Visarjana" },
