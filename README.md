@@ -6,9 +6,9 @@ End-to-end documentation for the booking platform.
 
 | | |
 |---|---|
-| ![Booking Platform](../photos/p1.png) | ![Admin Dashboard](../photos/p2.png) |
-| ![QR Scanner](../photos/p3.png) | ![Email Verification](../photos/p4.png) |
-| ![CAPTCHA](../photos/p5.png) | |
+| ![Booking Platform](./photos/p1.png) | ![Admin Dashboard](./photos/p2.png) |
+| ![QR Scanner](./photos/p3.png) | ![Email Verification](./photos/p4.png) |
+| ![CAPTCHA](./photos/p5.png) | |
 
 This repository is split into two apps:
 
