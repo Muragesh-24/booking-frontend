@@ -225,10 +225,7 @@ export default function AuthPage() {
                 <ShieldCheck className="h-5 w-5 text-emerald-300" />
                 <p className="mt-3 text-sm text-stone-300">Email verification blocks unconfirmed accounts from booking.</p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-                <ShieldCheck className="h-5 w-5 text-amber-300" />
-                <p className="mt-3 text-sm text-stone-300">CAPTCHA is skipped locally when CAPTCHA_ENABLED=false and enforced server-side when enabled.</p>
-              </div>
+         
             </div>
           </section>
 
@@ -314,7 +311,7 @@ export default function AuthPage() {
                   </div>
                 ) : (
                   <div className="rounded-2xl border border-dashed border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-                    CAPTCHA and email verification is disabled for local development. Set CAPTCHA_ENABLED=true in the backend and frontend env files to require verification.
+               This project is currently hosted on Render while the EC2 instance is temporarily off. Email verification and CAPTCHA are disabled for easy testing, but all core features are available for review.
                   </div>
                 )}
 
