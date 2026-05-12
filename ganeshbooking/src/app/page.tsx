@@ -20,173 +20,257 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { CalendarDays, ChevronRight, Clock3, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 
-import { Menu, X } from "lucide-react";
+import { Footer } from "@/components/ui/footer";
+import { Navbar } from "@/components/ui/navbar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+
+const highlights = [
+  "Cultural performances, devotional atmosphere, and well-managed seating",
+  "Instant QR ticketing for faster entry and volunteer check-in",
+  "Trustworthy registration flow with email verification and secure login",
+];
+
+const steps = [
+  "Register or sign in with your verified college email.",
+  "Complete the booking form and receive your booking confirmation.",
+  "Show the QR ticket at the gate for fast verification and entry.",
+];
+
+const timeline = [
+  { time: "10:00 AM", title: "Ganesh Pratishtpana Pooja" },
+  { time: "06:00 PM", title: "Cultural Performances" },
+  { time: "08:00 PM", title: "Dinner Service" },
+  { time: "10:00 PM", title: "Ganesh Visarjana" },
+];
+
+const contacts = [
+  { name: "Aravind KT", phone: "9141644060", role: "Volunteer lead" },
+  { name: "Shathadru", phone: "8660059031", role: "Registration support" },
+];
 
 export default function Home() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
-  const events = [
-    { time: "10:00 AM", title: "Ganesh Pratishtpana Pooja" },
-    { time: "06:00 PM", title: "Evening Cultural Activities" },
-    { time: "08:00 PM", title: "Dinner" },
-    { time: "10:00 PM", title: "Ganesh Visarjana" },
-  ];
-
-  const openbook=()=>{
-    setIsOpen(false) 
-          
-          router.push("/booking")
-  }
   return (
-    <main className="min-h-screen bg-[#0b0f19] text-white relative overflow-hidden scroll-smooth">
-      {/* Stars background */}
-      <div className="absolute inset-0 bg-[radial-gradient(white,transparent_1.5px)] [background-size:20px_20px] opacity-20"></div>
+    <main className="min-h-screen text-stone-900">
+      <Navbar onMenuClick={() => setIsOpen(true)} />
 
-      {/* Navbar */}
-      <nav className="w-full flex justify-between items-center px-6 md:px-16 py-4 absolute top-0 z-50">
-        {/* Logo */}
-        <div className="text-white font-bold text-lg md:text-xl">
-          Nammoora Ganeshotsava
+      {isOpen ? (
+        <div className="fixed inset-0 z-50 bg-stone-950/85 p-4 backdrop-blur-sm md:hidden">
+          <div className="mx-auto flex max-w-sm flex-col rounded-3xl border border-white/10 bg-stone-950 p-6 text-white shadow-2xl">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-300">Menu</p>
+              <button className="text-sm text-stone-300" onClick={() => setIsOpen(false)}>
+                Close
+              </button>
+            </div>
+            <div className="mt-6 flex flex-col gap-3 text-lg">
+              <a href="#about" onClick={() => setIsOpen(false)}>About</a>
+              <a href="#highlights" onClick={() => setIsOpen(false)}>Highlights</a>
+              <a href="#steps" onClick={() => setIsOpen(false)}>Booking steps</a>
+              <a href="#contact" onClick={() => setIsOpen(false)}>Contact</a>
+            </div>
+            <div className="mt-8 grid gap-3">
+              <Button onClick={() => { setIsOpen(false); router.push("/auth"); }}>Login / Register</Button>
+              <Button variant="outline" onClick={() => { setIsOpen(false); router.push("/booking"); }}>My Booking</Button>
+            </div>
+          </div>
         </div>
+      ) : null}
 
-        {/* Desktop menu */}
-        <ul className="hidden md:flex gap-8 text-gray-300 font-medium">
-          <li className="hover:text-yellow-400 cursor-pointer">Home</li>
-  
-          <li className="hover:text-yellow-400 cursor-pointer" >Booking closed</li>
-        </ul>
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(127,29,29,0.14),transparent_30%),radial-gradient(circle_at_top_right,rgba(217,119,6,0.18),transparent_30%),linear-gradient(180deg,#fffaf3_0%,#fff5e8_45%,#f4ead6_100%)]" />
+        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-24">
+          <div className="flex flex-col justify-center">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-900/10 bg-white/75 px-4 py-2 text-sm font-medium text-amber-900 shadow-sm">
+              <Sparkles className="h-4 w-4" />
+              Kannada Balaga IIT Kanpur Fest Booking Portal
+            </div>
+            <h1 className="mt-6 max-w-3xl text-5xl font-semibold tracking-tight text-stone-950 sm:text-6xl lg:text-7xl">
+              A premium, student-friendly portal for fest registration and QR entry.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-stone-600">
+              Register for the Kannada Balaga event, manage your booking securely, and present a clean QR ticket at the gate. Built for students, volunteers, and admins.
+            </p>
 
-        {/* Desktop Sign-in */}
-        {/* <button className="hidden md:block border border-yellow-400 text-yellow-400 px-4 py-1 rounded-full hover:bg-yellow-400 hover:text-black transition" onClick={()=>{router.push("/auth")}}>
-          Sign In
-        </button> */}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button size="lg" onClick={() => router.push("/auth")}>
+                Register now <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button size="lg" variant="outline" onClick={() => router.push("/booking")}>
+                View my booking
+              </Button>
+            </div>
 
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden text-white z-50"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </nav>
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              <Card>
+                <CardContent className="p-5">
+                  <CalendarDays className="h-5 w-5 text-amber-800" />
+                  <p className="mt-3 text-sm font-medium text-stone-500">Date</p>
+                  <p className="mt-1 text-lg font-semibold text-stone-950">6 September</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-5">
+                  <MapPin className="h-5 w-5 text-amber-800" />
+                  <p className="mt-3 text-sm font-medium text-stone-500">Venue</p>
+                  <p className="mt-1 text-lg font-semibold text-stone-950">Aashiyana Hall</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-5">
+                  <Clock3 className="h-5 w-5 text-amber-800" />
+                  <p className="mt-3 text-sm font-medium text-stone-500">Status</p>
+                  <p className="mt-1 text-lg font-semibold text-stone-950">Registration portal</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
 
-      {/* Fullscreen Mobile Menu */}
-      <div
-        className={`fixed inset-0 bg-[#0b0f19]/95 flex flex-col items-center justify-center gap-8 text-xl font-semibold transform transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        } z-40`}
-      >
-        <a href="#" className="hover:text-yellow-400" onClick={() => setIsOpen(false)}>
-          Home
-        </a>
-      
-        <a href="#" className="hover:text-yellow-400" >
-          Booking closed
-        </a>
-        {/* <button className="border border-yellow-400 text-yellow-400 px-6 py-2 rounded-full hover:bg-yellow-400 hover:text-black transition" onClick={()=>{router.push("/auth")}}>
-          Sign In
-        </button> */}
-      </div>
+          <div className="flex items-center justify-center lg:justify-end">
+            <div className="w-full max-w-xl rounded-[2rem] border border-amber-900/10 bg-stone-950 p-6 text-white shadow-[0_24px_80px_rgba(29,22,15,0.3)]">
+              <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.28em] text-amber-200">Ticket preview</p>
+                  <p className="mt-1 text-lg font-semibold">Kannada Balaga Night Pass</p>
+                </div>
+                <ShieldCheck className="h-6 w-6 text-emerald-300" />
+              </div>
 
-      {/* Hero section */}
-      <section className="flex flex-col items-center text-center px-4 md:px-8 mt-32 md:mt-28 relative z-10">
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6">
-          <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 bg-clip-text text-transparent">
-            ಶ್ರೀ ಗಣೇಶ ಚತುರ್ಥಿ ಮಹೋತ್ಸವ - ಕನ್ನಡ ಬಳಗ
-          </span>
-        </h1>
-        <p className="text-gray-300 text-lg md:text-xl max-w-2xl mb-8">
-          Celebrating Ganeshotsav By Kannada Balaga IIT Kanpur. A rebirth of culture, energy, and art.
-        </p>
-        <button
-          
-          className="bg-yellow-400 text-black font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition"
-         onClick={()=>{
-          router.push("./booking")
-         }}>
-         Booking closed
-        </button>
+              <div className="mt-6 grid gap-4 sm:grid-cols-[1fr_140px]">
+                <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#2c1711] to-[#0f1720] p-5">
+                  <p className="text-sm text-stone-300">What you get</p>
+                  <div className="mt-4 space-y-3 text-sm text-stone-200">
+                    {highlights.map((item) => (
+                      <p key={item} className="rounded-2xl bg-white/5 px-4 py-3">{item}</p>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-3xl border border-dashed border-white/20 bg-white p-4 text-stone-950">
+                  <div className="grid grid-cols-7 gap-1 opacity-90">
+                    {Array.from({ length: 49 }).map((_, index) => (
+                      <div
+                        key={index}
+                        className={`h-3 w-3 rounded-[3px] ${index % 3 === 0 || index % 5 === 0 ? "bg-stone-900" : "bg-stone-200"}`}
+                      />
+                    ))}
+                  </div>
+                  <p className="mt-4 text-center text-xs font-semibold uppercase tracking-[0.2em] text-stone-500">QR ticket area</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Events Timeline Section */}
-      <section id="events" className="relative z-10 py-20 px-6 md:px-20">
-    <h2 className="text-4xl font-bold text-center mb-4 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
-  Events Timeline
-</h2>
+      <section id="about" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+        <div className="grid gap-6 lg:grid-cols-3">
+          <Card className="lg:col-span-2">
+            <CardContent className="p-8">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-800">About the event</p>
+              <h2 className="mt-3 text-3xl font-semibold text-stone-950">A celebration of culture, discipline, and campus community.</h2>
+              <p className="mt-4 max-w-3xl text-stone-600 leading-7">
+                This portal is designed to make fest registration simple, trustworthy, and visually clear. Students can register quickly, volunteers can verify entries efficiently, and admins can manage bookings without ambiguity.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-8">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-800">Event snapshot</p>
+              <div className="mt-4 space-y-3 text-sm text-stone-600">
+                <p><span className="font-medium text-stone-950">Date:</span> 6 September</p>
+                <p><span className="font-medium text-stone-950">Venue:</span> Aashiyana Hall, New Shopping Complex</p>
+                <p><span className="font-medium text-stone-950">Audience:</span> IIT Kanpur students, volunteers, and guests</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
 
-<div className="text-center text-gray-700 mb-12 space-y-1">
-  <p className="font-semibold">Date: <span className="text-yellow-500">6th September</span></p>
-  <p className="font-semibold">Venue: <span className="text-yellow-500">Aashiyana Hall, New Shopping Complex</span></p>
-</div>
-
-        <div className="relative border-l-4 border-yellow-400 max-w-2xl mx-auto">
-          {events.map((event, idx) => (
-            <div key={idx} className="mb-10 ml-6">
-              <div className="absolute w-4 h-4 bg-yellow-400 rounded-full -left-2 mt-1"></div>
-              <time className="mb-1 text-sm font-normal text-gray-400">
-                {event.time}
-              </time>
-              <h3 className="text-lg font-semibold">{event.title}</h3>
-            </div>
+      <section id="highlights" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-3">
+          {[
+            { title: "Why register", text: "Get instant booking confirmation, a clean QR ticket, and easy access to check-in support." },
+            { title: "Event highlights", text: "Cultural performances, devotional setup, dinner service, and a professionally managed entry flow." },
+            { title: "Trust and safety", text: "Email verification, secure login, and protected booking and admin pathways." },
+          ].map((item) => (
+            <Card key={item.title}>
+              <CardContent className="p-8">
+                <h3 className="text-xl font-semibold text-stone-950">{item.title}</h3>
+                <p className="mt-3 leading-7 text-stone-600">{item.text}</p>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </section>
 
-      {/* Extra Menu Section */}
-    {/* Dinner Menu Section */}
-<section className="relative z-10 py-20 px-6 md:px-20 text-center ">
-  <h3 className="text-4xl font-extrabold mb-12 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-    🍽️ Dinner Menu
-  </h3>
+      <section id="steps" className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <Card>
+          <CardContent className="p-8 lg:p-10">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-800">Booking steps</p>
+            <div className="mt-6 grid gap-4 lg:grid-cols-3">
+              {steps.map((step, index) => (
+                <div key={step} className="rounded-3xl border border-amber-950/10 bg-white/70 p-6">
+                  <p className="text-sm font-semibold text-amber-800">Step {index + 1}</p>
+                  <p className="mt-3 text-stone-700 leading-7">{step}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
 
-<div className="flex justify-center">
-  <div className="bg-white shadow-2xl rounded-2xl p-10 max-w-md w-full">
-    <div className="text-gray-800 text-xl font-bold mb-4">Starters</div>
-    <ul className="space-y-4 text-gray-700 text-lg font-medium mb-6">
-      <li className="hover:scale-105 transition-transform">Kosumbari(vegetable Mix)</li>
-      <li className="hover:scale-105 transition-transform">Happla (papad)</li>   
-      <li className="hover:scale-105 transition-transform">Bajji (Besan Fries)</li>
-      <li className="hover:scale-105 transition-transform">Godi Huggi ( wheat Dessert)</li> 
-    </ul>
+      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <Card>
+          <CardContent className="p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-800">Events timeline</p>
+            <div className="mt-6 space-y-4">
+              {timeline.map((item) => (
+                <div key={item.title} className="flex gap-4 rounded-2xl border border-amber-950/10 bg-white/70 px-4 py-4">
+                  <div className="min-w-24 text-sm font-semibold text-amber-800">{item.time}</div>
+                  <div className="font-medium text-stone-800">{item.title}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-    <div className="text-gray-800 text-xl font-bold mb-4">Main Course</div>
-    <ul className="space-y-4 text-gray-700 text-lg font-medium">
-      <li className="hover:scale-105 transition-transform">Puliyogare(Temrind Rice)</li>
-      <li className="hover:scale-105 transition-transform">Chapati</li>
-      <li className="hover:scale-105 transition-transform">Kalu Palya (Chickpea Gravy/curry dish)</li>  
-      <li className="hover:scale-105 transition-transform">Chutney Pudi (spiced dry chutney powder)</li>
-      <li className="hover:scale-105 transition-transform">Rice & Sambar(Karnataka Special)</li>
-      <li className="hover:scale-105 transition-transform">Majjige (buttermilk)</li>
-    </ul>
-  </div>
-</div>
+        <Card id="contact">
+          <CardContent className="p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-800">Contact / help</p>
+            <div className="mt-6 space-y-4">
+              {contacts.map((contact) => (
+                <div key={contact.name} className="rounded-2xl border border-amber-950/10 bg-white/70 p-5">
+                  <p className="font-semibold text-stone-950">{contact.name}</p>
+                  <p className="mt-1 text-sm text-stone-600">{contact.role}</p>
+                  <p className="mt-2 text-sm text-stone-700">{contact.phone}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </section>
 
-</section>
-<div className="flex justify-center mt-8 mb-8">
-  <div className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full">
-    <div className="text-gray-800 text-xl font-bold mb-4">Contact</div>
-    <ul className="space-y-3 text-gray-700 text-lg font-medium">
-      <li>
-        <span className="font-semibold">Aravind KT:</span> 9141644060
-      </li>
-      <li>
-        <span className="font-semibold">Shathadru:</span> 8660059031
-      </li>
-    </ul>
-  </div>
-</div>
+      <div className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+        <Card className="bg-stone-950 text-white">
+          <CardContent className="flex flex-col gap-4 p-8 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-sm uppercase tracking-[0.24em] text-amber-200">Ready to register?</p>
+              <h2 className="mt-2 text-2xl font-semibold">Open your account and get your booking started.</h2>
+            </div>
+            <div className="flex gap-3">
+              <Button onClick={() => router.push("/auth")}>Login / Register</Button>
+              <Button variant="outline" onClick={() => router.push("/adminauth")}>Admin login</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-
-
-      {/* Footer */}
-      <footer className="relative z-10 bg-[#0b0f19] border-t border-gray-700 py-6 text-center text-gray-400 text-sm">
-        <p>© {new Date().getFullYear()} Nammoora Ganeshotsava. All rights reserved.</p>
-        <p className="mt-2">
-          Made with ❤️ for tradition & culture.
-        </p>
-      </footer>
+      <Footer />
     </main>
   );
 }

@@ -1,9 +1,16 @@
-// app/admin/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Download, Filter, ScanLine, ShieldCheck, Ticket, Users } from "lucide-react";
+
+import ProtectedAdminRoute from "@/components/ui/adminprotector";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/input";
+import { StatsCard } from "@/components/ui/stats-card";
 import {
   Table,
   TableBody,
@@ -12,17 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import ProtectedAdminRoute from "@/components/ui/adminprotector";
 
-// Types
-interface Booking {
+type Booking = {
   id: number;
   name: string;
   email: string;
@@ -32,16 +30,16 @@ interface Booking {
   total: number;
   createdAt: string;
   status: string;
-  statuscount:number;
+  statuscount: number;
   is_verified: boolean;
-}
+};
 
 export default function AdminPage() {
+  const router = useRouter();
   const [users, setUsers] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedUtr, setSelectedUtr] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const [stats, setStats] = useState({
     total: 0,
@@ -55,15 +53,13 @@ export default function AdminPage() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/`);
       const json = await res.json();
-      const sortedData = json.data.sort((a: Booking, b: Booking) => b.id - a.id);
-      json.data = sortedData;
-      console.log("Fetched users:", json.data);
-      setUsers(json.data);
+      const sortedData = [...(json.data || [])].sort((a: Booking, b: Booking) => b.id - a.id);
+      setUsers(sortedData);
       setStats({
-        total: json.total,
-        pendingVerify: json.pendingVerify,
-        totalEntered: json.totalEntered,
-        totalCoupans: json.totalcoupons,
+        total: json.total || 0,
+        pendingVerify: json.pendingVerify || 0,
+        totalEntered: json.totalEntered || 0,
+        totalCoupans: json.totalcoupons || 0,
       });
     } catch (err) {
       console.error("Failed to fetch users", err);
@@ -76,7 +72,6 @@ export default function AdminPage() {
     fetchUsers();
   }, []);
 
-  // Update helpers
   const handleEntered = async (utr: string) => {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/enter`, {
@@ -84,13 +79,7 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ utr, action: "entered" }),
       });
-
-      // update state locally
-      setUsers((prev) =>
-        prev.map((u) =>
-          u.utr === utr ? { ...u, status: "Present" } : u
-        )
-      );
+      setUsers((prev) => prev.map((u) => (u.utr === utr ? { ...u, status: "Present" } : u)));
     } catch (err) {
       console.error("Error marking entered:", err);
     }
@@ -103,239 +92,178 @@ export default function AdminPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ utr, action: "verified" }),
       });
-
-      // update state locally
-      setUsers((prev) =>
-        prev.map((u) =>
-          u.utr === utr ? { ...u, is_verified: true } : u
-        )
-      );
+      setUsers((prev) => prev.map((u) => (u.utr === utr ? { ...u, is_verified: true } : u)));
     } catch (err) {
       console.error("Error marking verified:", err);
     }
   };
 
-  const filteredUsers = users.filter(
-  (u) =>
-    u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.utr.toLowerCase().includes(searchTerm.toLowerCase())
-);
-
+  const filteredUsers = useMemo(() => {
+    return users.filter((u) => {
+      const matchesSearch =
+        u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        u.utr.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "verified" && u.is_verified) ||
+        (statusFilter === "pending" && !u.is_verified) ||
+        (statusFilter === "present" && u.status.toLowerCase() === "present");
+      return matchesSearch && matchesStatus;
+    });
+  }, [users, searchTerm, statusFilter]);
 
   return (
     <ProtectedAdminRoute>
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold">Admin Side</h1>
-
-      {/* Stats Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-lg font-semibold">Total Coupons</p>
-            <p className="text-2xl">{stats.totalCoupans}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-lg font-semibold">Total Bookings</p>
-            <p className="text-2xl">{stats.total}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-lg font-semibold">Pending Verification</p>
-            <p className="text-2xl">{stats.pendingVerify}</p>
-          </CardContent>
-        </Card>
-        {/* <Card>
-          <CardContent className="p-4">
-            <p className="text-lg font-semibold">Total Entered</p>
-            <p className="text-2xl">{stats.totalEntered}</p>
-          </CardContent>
-        </Card> */}
-      </div>
-
-      {/* Action Dialog */}
-      {selectedUtr && (
-        <Dialog open={!!selectedUtr} onOpenChange={() => setSelectedUtr(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Manage Booking</DialogTitle>
-              <DialogDescription>UTR: {selectedUtr}</DialogDescription>
-            </DialogHeader>
-            <div className="flex gap-4 mt-4">
-              <Button
-                className="flex-1"
-                onClick={() => {
-                  handleEntered(selectedUtr);
-                  setSelectedUtr(null);
-                }}
-              >
-                Entered
+      <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(180,83,9,0.12),transparent_32%),linear-gradient(180deg,#fffaf3_0%,#f8eedc_100%)] px-4 py-6 text-stone-900 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl space-y-6">
+          <div className="rounded-[2rem] bg-stone-950 px-6 py-8 text-white shadow-[0_24px_80px_rgba(29,22,15,0.26)]">
+            <p className="text-sm uppercase tracking-[0.28em] text-amber-200">Admin panel</p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Kannada Balaga booking operations</h1>
+            <p className="mt-4 max-w-3xl text-stone-300">
+              Monitor registrations, verify bookings, manage check-ins, and keep the event entry flow organized.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button onClick={() => router.push("/scanner")}>
+                <ScanLine className="h-4 w-4" /> Open scanner
               </Button>
-              <Button
-                className="flex-1"
-                variant="secondary"
-                onClick={() => {
-                  handleVerified(selectedUtr);
-                  setSelectedUtr(null);
-                }}
-              >
-                Verified
-              </Button>
-
+              <Button variant="outline" onClick={() => router.push("/")}>Back to site</Button>
             </div>
-          </DialogContent>
-        </Dialog>
-      )}
+          </div>
 
-      {/* Table Section */}
-      <div className="mt-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">List of Registered People</h2>
-          <Button onClick={fetchUsers} disabled={loading}>
-            {loading ? "Refreshing..." : "Refresh"}
-          </Button>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <StatsCard label="Total registrations" value={stats.total} badge="All users" />
+            <StatsCard label="Total bookings" value={stats.totalCoupans} badge="Bookings" />
+            <StatsCard label="Pending verification" value={stats.pendingVerify} badge="Review" />
+            <StatsCard label="Checked in" value={stats.totalEntered} badge="Gate" />
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl">Search and filters</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4 lg:grid-cols-[1fr_auto_auto] lg:items-end">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-stone-600">Search bookings</label>
+                <Input
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search name, email, or UTR"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-stone-600">Status filter</label>
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className="h-11 rounded-xl border border-amber-950/10 bg-white/85 px-4 text-sm shadow-sm outline-none"
+                >
+                  <option value="all">All</option>
+                  <option value="verified">Verified</option>
+                  <option value="pending">Pending</option>
+                  <option value="present">Present</option>
+                </select>
+              </div>
+              <Button onClick={fetchUsers} disabled={loading}>
+                {loading ? "Refreshing..." : "Refresh data"}
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <CardTitle className="text-2xl">Bookings table</CardTitle>
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="outline" onClick={() => window.print()}>
+                    <Download className="h-4 w-4" /> Export CSV
+                  </Button>
+                  <Button variant="outline">
+                    <Filter className="h-4 w-4" /> Quick filters
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {filteredUsers.length === 0 ? (
+                <EmptyState
+                  title={loading ? "Loading bookings" : "No bookings found"}
+                  description={loading ? "Please wait while the admin list loads." : "Try a different search or filter."}
+                />
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>UTR</TableHead>
+                      <TableHead>Total</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Check-in</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredUsers.map((user) => (
+                      <TableRow key={user.utr}>
+                        <TableCell>
+                          <div className="font-medium text-stone-950">{user.name}</div>
+                          <div className="text-xs text-stone-500">{user.id}</div>
+                        </TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell className="font-mono text-xs">{user.utr}</TableCell>
+                        <TableCell>{user.total}</TableCell>
+                        <TableCell>
+                          <Badge variant={user.is_verified ? "success" : "warning"}>
+                            {user.is_verified ? "Verified" : "Pending"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={user.status.toLowerCase() === "present" ? "success" : "outline"}>
+                            {user.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{new Date(user.createdAt).toLocaleString()}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-2">
+                            <Button size="sm" variant="outline" onClick={() => handleVerified(user.utr)}>
+                              <ShieldCheck className="h-4 w-4" /> Verify
+                            </Button>
+                            <Button size="sm" onClick={() => handleEntered(user.utr)}>
+                              <Ticket className="h-4 w-4" /> Check in
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl">Volunteer notes</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-3">
+              <div className="rounded-3xl border border-amber-950/10 bg-white/70 p-5">
+                <Users className="h-5 w-5 text-amber-800" />
+                <p className="mt-3 font-medium">Search before manual actions</p>
+              </div>
+              <div className="rounded-3xl border border-amber-950/10 bg-white/70 p-5">
+                <ShieldCheck className="h-5 w-5 text-emerald-700" />
+                <p className="mt-3 font-medium">Mark entry only after QR verification</p>
+              </div>
+              <div className="rounded-3xl border border-amber-950/10 bg-white/70 p-5">
+                <Ticket className="h-5 w-5 text-stone-700" />
+                <p className="mt-3 font-medium">Keep the check-in desk responsive on mobile</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-
-        <div className="flex justify-between items-center mb-4">
- 
-  <div className="flex gap-2">
-    <input
-      type="text"
-      placeholder="Search by name, email, or UTR..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="border rounded px-3 py-2 w-64"
-    />
-    {/* <Button onClick={fetchUsers} disabled={loading}>
-      {loading ? "Refreshing..." : "Refresh"}
-    </Button> */}
-  </div>
-</div>
-
-
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>No</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>UTR Number</TableHead>
-              <TableHead>Kannadigas</TableHead>
-              <TableHead>Non-Kannadigas</TableHead>
-              <TableHead>Total</TableHead>
-              <TableHead>Created At</TableHead>
-              <TableHead>Created time</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>StatusCount</TableHead>
-              <TableHead>Verification</TableHead>
-              <TableHead>Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredUsers.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={10} className="text-center">
-                  {loading ? "Loading..." : "No users found"}
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredUsers.map((user) => (
-                <TableRow key={user.utr} className={`${user.is_verified==true && user.status=="Present"?"bg-green-300":"bg-white"}`}>
-                  <TableCell>{user.id-26}</TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.utr}</TableCell>
-                  <TableCell>{user.kannadigas}</TableCell>
-                  <TableCell>{user.nonKannadigas}</TableCell>
-                  <TableCell>{user.total}</TableCell>
-                  <TableCell>
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </TableCell>
-                    <TableCell>
-                    {new Date(user.createdAt).toLocaleTimeString()}
-                    </TableCell>
-                  <TableCell>{user.status}</TableCell>
-                <TableCell>
-  <div className="flex items-center gap-2">
-    <button
-      className="px-2 py-1 border rounded disabled:opacity-50"
-      onClick={() =>
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === user.id && u.statuscount > 0
-              ? { ...u, statuscount: u.statuscount - 1 }
-              : u
-          )
-        )
-      }
-      disabled={user.statuscount <= 0}
-    >
-      –
-    </button>
-
-    <span>
-      {user.statuscount}/{user.kannadigas + user.nonKannadigas}
-    </span>
-
-    <button
-      className="px-2 py-1 border rounded disabled:opacity-50"
-      onClick={() =>
-        setUsers((prev) =>
-          prev.map((u) =>
-            u.id === user.id &&
-            u.statuscount < u.kannadigas + u.nonKannadigas
-              ? { ...u, statuscount: u.statuscount + 1 }
-              : u
-          )
-        )
-      }
-      disabled={user.statuscount >= user.kannadigas + user.nonKannadigas}
-    >
-      +
-    </button>
-
-    {/* Save button */}
-    <button
-      className="ml-2 px-3 py-1 bg-blue-500 text-white rounded"
-      onClick={async () => {
-        try {
-          await fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_URL}/statuscount/${user.utr}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ statuscount: user.statuscount }),
-          });
-        } catch (err) {
-          console.error("Failed to save", err);
-        }
-      }}
-    >
-      Save
-    </button>
-  </div>
-</TableCell>
-
-                  <TableCell className={user.is_verified ? "text-green-600 font-semibold" : "text-red-600 font-semibold"}>
-                    {user.is_verified ? "Verified" : "Pending"}
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setSelectedUtr(user.utr)}
-                    >
-                      Action
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
       </div>
-    </div>
     </ProtectedAdminRoute>
   );
 }

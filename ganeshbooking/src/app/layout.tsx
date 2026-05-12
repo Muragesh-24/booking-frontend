@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kannada Balaga IIT Kanpur",
-  description: "Celebrating Ganeshotsav By Kannada Balaga IIT Kanpur. A rebirth of culture, energy, and art.",
+  title: "Kannada Balaga IIT Kanpur | Fest Booking Portal",
+  description:
+    "Professional fest booking, registration, QR ticketing, and volunteer check-in portal for Kannada Balaga IIT Kanpur.",
 };
 
 export default function RootLayout({
@@ -23,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
         {children}
       </body>

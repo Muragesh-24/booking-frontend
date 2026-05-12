@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/spinner";
 
 type ProtectedRouteProps = {
   children: ReactNode;
@@ -41,10 +42,11 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }, [router]);
 
   if (loading) {
-    return <div className="flex justify-center items-center py-10">
-  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-400"></div>
-</div>
-; // or a spinner
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center">
+        <Spinner className="h-8 w-8" />
+      </div>
+    );
   }
 
   return <>{children}</>;

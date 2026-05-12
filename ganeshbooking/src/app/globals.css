@@ -116,7 +116,25 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground min-h-screen antialiased;
+    background:
+      radial-gradient(circle at top, rgba(180, 83, 9, 0.18), transparent 28%),
+      radial-gradient(circle at right, rgba(120, 53, 15, 0.12), transparent 22%),
+      linear-gradient(180deg, #fffaf3 0%, #fff6eb 35%, #f8f0e0 100%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight;
+  }
+
+  ::selection {
+    background: rgba(180, 83, 9, 0.18);
   }
 }
