@@ -148,7 +148,7 @@ The backend already includes:
 3. The email contains a link like:
 
 ```text
-http://localhost:3000/auth/verified?query=<token>
+http://localhost:3000/auth/verified?query=<token-o>
 ```
 
 4. That page can forward the token to the backend verification endpoint.
