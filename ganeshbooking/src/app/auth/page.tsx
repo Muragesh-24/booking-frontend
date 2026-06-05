@@ -34,6 +34,20 @@ const API_URL = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080").rep
 const CAPTCHA_ENABLED = process.env.NEXT_PUBLIC_CAPTCHA_ENABLED === "true";
 const CAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_CAPTCHA_SITE_KEY || "";
 
+function turnstileErrorMessage(errorCode?: string | number) {
+  const code = typeof errorCode === "number" ? errorCode : Number(errorCode);
+
+  if (Number.isFinite(code) && Math.floor(code / 1000) === 600) {
+    return "Turnstile is failing in this browser. Disable privacy/ad-blocking extensions or try Chrome/Edge.";
+  }
+
+  if (Number.isFinite(code) && Math.floor(code / 1000) === 200) {
+    return "Turnstile could not load. Check if challenges.cloudflare.com is blocked by your network or browser.";
+  }
+
+  return "CAPTCHA could not be loaded. Please refresh the page and try again.";
+}
+
 type ApiResponse = {
   error?: string;
   message?: string;
@@ -71,6 +85,11 @@ export default function AuthPage() {
       return;
     }
 
+    if (!CAPTCHA_SITE_KEY) {
+      setError("Set NEXT_PUBLIC_CAPTCHA_SITE_KEY in .env.local before enabling CAPTCHA.");
+      return;
+    }
+
     const container = captchaContainerRef.current;
     container.innerHTML = "";
 
@@ -84,9 +103,9 @@ export default function AuthPage() {
       "expired-callback": () => {
         setCaptchaToken("");
       },
-      "error-callback": () => {
+      "error-callback": (errorCode?: string | number) => {
         setCaptchaToken("");
-        setError("CAPTCHA could not be loaded. Please refresh the page and try again.");
+        setError(turnstileErrorMessage(errorCode));
       },
     });
 
@@ -96,7 +115,7 @@ export default function AuthPage() {
       }
       widgetIdRef.current = null;
     };
-  }, [captchaScriptReady, mode]);
+  }, [CAPTCHA_SITE_KEY, captchaScriptReady, mode]);
 
   const getEndpoint = () => `${API_URL}/user/${mode === "signin" ? "signin" : "signup"}`;
 
@@ -184,8 +203,8 @@ export default function AuthPage() {
         setMessage("Login successful. Redirecting to your dashboard.");
         router.push("/booking");
       } else {
-        setMessage("Signup successful. Please verify your email before booking.");
-        router.push("/auth/verified");
+     setMessage("Account created successfully. Please verify your email before booking.");
+        // router.push("/auth/verified");
       }
     } catch (err: unknown) {
       if (err instanceof TypeError) {
