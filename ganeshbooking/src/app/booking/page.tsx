@@ -13,7 +13,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { EmptyState } from "@/components/ui/empty-state";
 import ProtectedRoute from "@/components/ui/protector";
 
-
 type Booking = {
   id: number;
   name: string;
@@ -27,6 +26,7 @@ type Booking = {
   is_verified: boolean;
   createdAt: string;
 };
+
 export default function BookingPage() {
   const [bookings, setBookings] = useState<{ coupons: Booking[] }>({ coupons: [] });
   const [loading, setLoading] = useState(true);
@@ -43,8 +43,18 @@ export default function BookingPage() {
   const allBookings = bookings.coupons;
   const latestBooking = allBookings[0];
 
+  // Helper to sync the latest booking data into the form
+  const syncLatestToForm = (latest: Booking | undefined) => {
+    if (latest) {
+      setBookingName(latest.name || "");
+      setBookingPhone(latest.phone || "");
+      setBookingUtr(latest.utr || "");
+      setKannadigas(Number.isFinite(latest.kannadigas) ? latest.kannadigas! : 1);
+      setNonKannadigas(Number.isFinite(latest.nonKannadigas) ? latest.nonKannadigas! : 0);
+    }
+  };
+
   const fetchBookings = useCallback(async () => {
-    setLoading(true);
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -55,7 +65,7 @@ export default function BookingPage() {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_USER_API_URL}/mybooking`,
         {
-          method: "GET", 
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -68,17 +78,16 @@ export default function BookingPage() {
       }
 
       const data = await res.json();
-      setBookings({ coupons: data.data || [] });
-
-      const latest = (data.data || [])[0];
-      if (latest) {
-        setBookingName(latest.name || "");
-        setBookingPhone(latest.phone || "");
-        setBookingUtr(latest.utr || "");
-        setKannadigas(Number.isFinite(latest.kannadigas) ? latest.kannadigas : 1);
-        setNonKannadigas(Number.isFinite(latest.nonKannadigas) ? latest.nonKannadigas : 0);
-      }
-
+      const fetchedBookings = data.data || [];
+      
+      // Update state AND overwrite localStorage with a fresh timestamp
+      setBookings({ coupons: fetchedBookings });
+      localStorage.setItem("bookingCache", JSON.stringify({
+        timestamp: Date.now(),
+        coupons: fetchedBookings
+      }));
+      
+      syncLatestToForm(fetchedBookings[0]);
     } catch (err) {
       console.error("Error fetching bookings:", err);
     } finally {
@@ -86,8 +95,37 @@ export default function BookingPage() {
     }
   }, [router]);
 
- useEffect(() => {
-    fetchBookings();
+  useEffect(() => {
+    const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes in milliseconds
+    const cachedData = localStorage.getItem("bookingCache");
+    let shouldFetch = true;
+
+    if (cachedData) {
+      try {
+        const parsedCache = JSON.parse(cachedData);
+        
+        // Safety check to ensure the cache has our new timestamp structure
+        if (parsedCache.timestamp && parsedCache.coupons) {
+          // Immediately show the cached data to the user
+          setBookings({ coupons: parsedCache.coupons });
+          syncLatestToForm(parsedCache.coupons[0]);
+          setLoading(false); 
+
+          // Check if the cache is still fresh
+          const age = Date.now() - parsedCache.timestamp;
+          if (age < CACHE_DURATION_MS) {
+            shouldFetch = false; // Cancel the background fetch
+          }
+        }
+      } catch (e) {
+        console.error("Failed to parse cache", e);
+      }
+    }
+
+    // Only hit the backend if there is no cache, or if the cache is older than 5 minutes
+    if (shouldFetch) {
+      fetchBookings();
+    }
   }, [fetchBookings]);
 
   const handleBookTicket = async (event: React.FormEvent) => {
@@ -122,8 +160,33 @@ export default function BookingPage() {
         throw new Error(data.error || "Failed to book ticket");
       }
 
+      const newBookingData = data.data || data;
+      const newBooking: Booking = {
+        id: newBookingData.id || Date.now(),
+        name: bookingName,
+        email: latestBooking?.email || "", 
+        phone: bookingPhone,
+        utr: bookingUtr,
+        kannadigas,
+        nonKannadigas,
+        total,
+        status: newBookingData.status || "Pending",
+        is_verified: newBookingData.is_verified || false,
+        createdAt: newBookingData.createdAt || new Date().toISOString(),
+        ...newBookingData 
+      };
+
+      // Add to state and instantly update localStorage, resetting the 5-minute timer
+      setBookings((prev) => {
+        const updatedCoupons = [newBooking, ...prev.coupons];
+        localStorage.setItem("bookingCache", JSON.stringify({
+          timestamp: Date.now(),
+          coupons: updatedCoupons
+        }));
+        return { coupons: updatedCoupons };
+      });
+
       toast.success("Ticket booked successfully");
-      await fetchBookings();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Booking failed";
       toast.error(message);
@@ -131,7 +194,6 @@ export default function BookingPage() {
       setSubmitting(false);
     }
   };
-
 
   return (
     <ProtectedRoute>
